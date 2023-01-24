@@ -1,11 +1,14 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import loginImg from '../../assets/images/login/login.svg'
 import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
 const Login = () => {
 
     const { login } = useContext(AuthContext)
+    const location = useLocation()
+    const navigate = useNavigate()
 
+    const from = location.state?.from?.pathname || '/'
 
     const handleLogin = (event) => {
         event.preventDefault();
@@ -16,9 +19,31 @@ const Login = () => {
         login(email, password)
             .then(result => {
                 const user = result.user;
-                console.log(user);
+                //get jwt token
+                const currentUser = {
+                    email: user.email
+                }
+
+                console.log(currentUser);
+
+                fetch('http://localhost:5000/jwt', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify(currentUser)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                        localStorage.setItem('geniusToken', data.token)
+                        navigate(from, { replace: true })
+                    })
+
             })
-            .then(error => console.log(error));
+            .catch(error => console.log(error));
+
+        form.reset()
     }
 
     return (

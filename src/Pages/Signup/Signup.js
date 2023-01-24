@@ -1,10 +1,16 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import loginImg from '../../assets/images/login/login.svg'
 import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
 
 const Signup = () => {
     const { createUser } = useContext(AuthContext)
+
+    const location = useLocation();
+    const navigate = useNavigate()
+
+    const from = location.state?.from?.pathname || '/'
+
     const handleSignup = (event) => {
         event.preventDefault();
         const form = event.target;
@@ -14,8 +20,13 @@ const Signup = () => {
         createUser(email, password)
             .then(result => {
                 console.log(result.user)
+
+                navigate(from, { replace: true })
             })
-            .then(err => console.error(err))
+            .catch(err => console.error(err))
+
+        form.reset()
+
     }
     return (
         <div className="hero w-full">
@@ -43,7 +54,7 @@ const Signup = () => {
                             <label className="label">
                                 <span className="label-text">Password</span>
                             </label>
-                            <input name='password' type="text" placeholder="Password" className="input input-bordered" required />
+                            <input name='password' type="password" placeholder="Password" className="input input-bordered" required />
                         </div>
                         <div className="form-control mt-6">
                             <input className='btn btn-primary' type="submit" value="Signup" />
