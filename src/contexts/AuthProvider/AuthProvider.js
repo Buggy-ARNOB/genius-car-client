@@ -23,6 +23,7 @@ const AuthProvider = ({ children }) => {
     }
 
     const logOut = () => {
+        localStorage.removeItem('geniusToken')
         return signOut(auth);
     }
 
@@ -47,7 +48,7 @@ const AuthProvider = ({ children }) => {
         logOut
     }
 
-    console.log(user)
+    // console.log(user)
 
     return (
         <AuthContext.Provider value={authInfo}>

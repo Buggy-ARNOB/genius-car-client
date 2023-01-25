@@ -3,7 +3,7 @@ import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
 import OrderRow from './OrderRow';
 
 const Orders = () => {
-    const { user, loading, logOut } = useContext(AuthContext)
+    const { user, logOut } = useContext(AuthContext)
     const [orders, setOrders] = useState([])
     useEffect(() => {
         fetch(`http://localhost:5000/orders?email=${user?.email}`, {
@@ -13,19 +13,23 @@ const Orders = () => {
         })
             .then(res => {
                 if (res.status === 401 || res.status === 403) {
-                    logOut()
+                    return logOut()
                 }
                 return res.json()
             })
             .then(data => setOrders(data))
-    }, [user?.email])
+    }, [user?.email, logOut])
 
 
     const handleDelete = (id) => {
         const procced = window.confirm('Are you sure to delete this order?')
         if (procced) {
             fetch(`http://localhost:5000/orders/${id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    authorization: `Bearer ${localStorage.getItem('geniusToken')}`
+                }
+
             })
                 .then(res => res.json())
                 .then(data => {
@@ -44,7 +48,8 @@ const Orders = () => {
         fetch(`http://localhost:5000/orders/${id}`, {
             method: 'PATCH',
             headers: {
-                'content-type': 'application/json'
+                'content-type': 'application/json',
+                authorization: `Bearer ${localStorage.getItem('geniusToken')}`
             },
             body: JSON.stringify({ status: 'Approved' })
         })
@@ -65,7 +70,7 @@ const Orders = () => {
 
     return (
         <div>
-            <h2 className='text-3xl'>you have {orders.length}</h2>
+            <h2 className='text-3xl'>you have {orders?.length}</h2>
 
             <div className="overflow-x-auto w-full">
                 <table className="table w-full">
