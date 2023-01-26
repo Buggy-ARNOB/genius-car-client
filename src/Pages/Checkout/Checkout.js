@@ -29,7 +29,7 @@ const Checkout = () => {
             alert("Please enter a 11 digit phone number")
         }
         else {
-            fetch("http://localhost:5000/orders", {
+            fetch("https://genius-car-sever.vercel.app/orders", {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json',

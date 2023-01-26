@@ -6,7 +6,7 @@ const Orders = () => {
     const { user, logOut } = useContext(AuthContext)
     const [orders, setOrders] = useState([])
     useEffect(() => {
-        fetch(`http://localhost:5000/orders?email=${user?.email}`, {
+        fetch(`https://genius-car-sever.vercel.app/orders?email=${user?.email}`, {
             headers: {
                 authorization: `Bearer ${localStorage.getItem('geniusToken')}`
             }
@@ -24,7 +24,7 @@ const Orders = () => {
     const handleDelete = (id) => {
         const procced = window.confirm('Are you sure to delete this order?')
         if (procced) {
-            fetch(`http://localhost:5000/orders/${id}`, {
+            fetch(`https://genius-car-sever.vercel.app/orders/${id}`, {
                 method: 'DELETE',
                 headers: {
                     authorization: `Bearer ${localStorage.getItem('geniusToken')}`
@@ -45,7 +45,7 @@ const Orders = () => {
     }
 
     const handleStatusUpdate = id => {
-        fetch(`http://localhost:5000/orders/${id}`, {
+        fetch(`https://genius-car-sever.vercel.app/orders/${id}`, {
             method: 'PATCH',
             headers: {
                 'content-type': 'application/json',
