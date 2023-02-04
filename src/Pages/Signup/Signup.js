@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { setAuthToken } from '../../api/auth';
 import loginImg from '../../assets/images/login/login.svg'
 import { AuthContext } from '../../contexts/AuthProvider/AuthProvider';
 
@@ -20,8 +21,8 @@ const Signup = () => {
         createUser(email, password)
             .then(result => {
                 console.log(result.user)
+                setAuthToken(result.user)
 
-                navigate(from, { replace: true })
             })
             .catch(err => console.error(err))
 

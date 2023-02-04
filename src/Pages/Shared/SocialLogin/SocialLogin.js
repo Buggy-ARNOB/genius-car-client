@@ -1,5 +1,6 @@
 import React from 'react';
 import { useContext } from 'react';
+import { setAuthToken } from '../../../api/auth';
 import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 
 const SocialLogin = () => {
@@ -10,22 +11,8 @@ const SocialLogin = () => {
             .then(result => {
                 const user = result.user
                 console.log(user)
-                const currentUser = {
-                    email: user.email
-                }
+                setAuthToken(user)
 
-                fetch('https://genius-car-sever.vercel.app/jwt', {
-                    method: 'POST',
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    body: JSON.stringify(currentUser)
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        console.log(data);
-                        localStorage.setItem('geniusToken', data.token)
-                    })
             })
             .catch(err => console.error(err))
     }
